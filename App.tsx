@@ -2,7 +2,13 @@ import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { Asset } from "expo-asset";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { SQLiteProvider } from "expo-sqlite";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import Home from "./screens/Home";
+
+const Stack = createNativeStackNavigator();
 
 const loadDatabase = async () => {
   const dbName = "mySQLiteDB.db";
@@ -38,18 +44,29 @@ export default function App() {
     );
   }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Suspense
+        fallback={
+          <View style={{ flex: 1, backgroundColor: "red" }}>
+            <ActivityIndicator size={"large"} />
+            <Text>Loading database...</Text>
+          </View>
+        }
+      >
+        <SQLiteProvider databaseName="mySQLiteDB.db" useSuspense>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{
+                headerTitle: "My Expense Buddy",
+                headerLargeTitle: true,
+              }}
+            />
+          </Stack.Navigator>
+          <StatusBar style="auto" />
+        </SQLiteProvider>
+      </Suspense>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
