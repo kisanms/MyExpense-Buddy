@@ -1,9 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { Asset } from "expo-asset";
+import { useEffect, useState } from "react";
 
-const loadDatabases = async () => {
+const loadDatabase = async () => {
   const dbName = "mySQLiteDB.db";
   const dbAsset = require("./assets/mySQLiteDB.db");
   const dbUri = Asset.fromModule(dbAsset).uri;
@@ -21,6 +22,21 @@ const loadDatabases = async () => {
   }
 };
 export default function App() {
+  const [dbloaded, setDbLoaded] = useState(false);
+  useEffect(() => {
+    loadDatabase()
+      .then(() => setDbLoaded(true))
+      .catch((error) => console.error(error));
+  }, []);
+
+  if (!dbloaded) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator size={"large"} />
+        <Text>Loading database...</Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <Text>Open up App.tsx to start working on your app</Text>
