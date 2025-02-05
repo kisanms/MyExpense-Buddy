@@ -3,7 +3,10 @@ import React, { useEffect } from "react";
 import { Category, Transaction } from "../types";
 import { useSQLiteContext } from "expo-sqlite";
 import TransactionList from "../components/TransactionsList";
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 const Home = () => {
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
@@ -35,7 +38,7 @@ const Home = () => {
     });
   }
   return (
-    <ScrollView contentContainerStyle={{ padding: 15, paddingVertical: 165 }}>
+    <ScrollView contentContainerStyle={{ padding: 15, paddingVertical: hp(3) }}>
       <TransactionList
         categories={categories}
         transactions={transactions}
