@@ -1,15 +1,21 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
-import { Category, Transaction } from "../types";
+import { Category, Transaction, TransactionsByMonth } from "../types";
 import { useSQLiteContext } from "expo-sqlite";
 import TransactionList from "../components/TransactionsList";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import Card from "../components/ui/Card";
 const Home = () => {
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
+  const [transactionsByMonth, setTransactionsByMonth] =
+    React.useState<TransactionsByMonth>({
+      totalExpenses: 0,
+      totalIncome: 0,
+    });
 
   const db = useSQLiteContext();
 
@@ -39,6 +45,10 @@ const Home = () => {
   }
   return (
     <ScrollView contentContainerStyle={{ padding: 15, paddingVertical: hp(3) }}>
+      <TransactionSummary
+        totalExpenses={transactionsByMonth.totalExpenses}
+        totalIncome={transactionsByMonth.totalIncome}
+      />
       <TransactionList
         categories={categories}
         transactions={transactions}
@@ -47,6 +57,22 @@ const Home = () => {
     </ScrollView>
   );
 };
+
+function TransactionSummary({
+  totalIncome,
+  totalExpenses,
+}: TransactionsByMonth) {
+  const savings = totalIncome - totalExpenses;
+  const readablePeriod = new Date().toLocaleDateString("default", {
+    month: "long",
+    year: "numeric",
+  });
+  return (
+    <Card>
+      <Text>Summary For {readablePeriod}</Text>
+    </Card>
+  );
+}
 
 export default Home;
 
