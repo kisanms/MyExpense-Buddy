@@ -37,6 +37,11 @@ const Home = () => {
     setCategories(categoriesResult);
 
     const now = new Date();
+    // Set to the first day of the current month
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    // Get the first day of the next month, then subtract one millisecond to get the end of the current month
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    endOfMonth.setMilliseconds(endOfMonth.getMilliseconds() - 1);
   }
 
   async function deleteTransaction(id: number) {
