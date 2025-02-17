@@ -42,6 +42,10 @@ const Home = () => {
     // Get the first day of the next month, then subtract one millisecond to get the end of the current month
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     endOfMonth.setMilliseconds(endOfMonth.getMilliseconds() - 1);
+
+    // Convert to Unix timestamps (seconds)
+    const startOfMonthTimestamp = Math.floor(startOfMonth.getTime() / 1000);
+    const endOfMonthTimestamp = Math.floor(endOfMonth.getTime() / 1000);
   }
 
   async function deleteTransaction(id: number) {
