@@ -35,6 +35,8 @@ const Home = () => {
       `SELECT * FROM Categories;`
     );
     setCategories(categoriesResult);
+
+    const now = new Date();
   }
 
   async function deleteTransaction(id: number) {
